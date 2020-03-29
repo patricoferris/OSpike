@@ -1,0 +1,4 @@
+(executable
+ (name ospike)
+ (libraries core re2)
+ (preprocess (pps ppx_jane)))
