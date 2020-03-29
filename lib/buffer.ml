@@ -19,3 +19,5 @@ let is_full buff = Queue.length buff.data = buff.capacity
 
 let print_buffer print buff = 
   Queue.iter (fun el -> print el) buff.data
+
+let get_data buff = buff.data

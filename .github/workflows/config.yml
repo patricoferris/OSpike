@@ -1,0 +1,26 @@
+name: OSpike Testing
+on: [push, pull_request]
+jobs:
+  run:
+    name: Build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        ocaml-version: ["4.07.0", "4.08.1"]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2.0.0
+      - name: Use OCaml ${{ matrix.ocaml-version }}
+        uses: avsm/setup-ocaml@v1.0
+        with:
+          ocaml-version: ${{ matrix.ocaml-version }}
+      - run: opam pin add ospike.dev -n .
+      - run: opam depext -yt ospike
+      - name: Install Deps
+        run: opam install -t . --deps-only
+      - name: Build
+        run: opam exec -- dune build
+      - name: Test
+        run: opam exec -- dune runtest

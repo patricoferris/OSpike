@@ -20,3 +20,6 @@ val print_buffer : ('a -> unit) -> 'a t -> unit
 
 val copy : 'a t -> 'a t 
 (** Creates a copy of the data *)
+
+val get_data : 'a t -> 'a Queue.t
+(** Extract the underlying queue *)

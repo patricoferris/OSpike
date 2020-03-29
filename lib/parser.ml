@@ -37,7 +37,6 @@ let add_to_table freq_tbl instr_group =
     Hashtbl.replace freq_tbl instr_group (f + 1)
   with Not_found -> Hashtbl.add freq_tbl instr_group 1
 
-
 let add_instruction buff tbl str = 
   let instr = parse_line str in 
   let _ = Buffer.push instr buff in 
@@ -53,5 +52,3 @@ let from_stdin options =
   let freq_tbl = Hashtbl.create 100 in
   let _s = read_stream (add_instruction buffer freq_tbl) 1 stdin in 
     freq_tbl
-
-  

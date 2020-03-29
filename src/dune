@@ -1,4 +1,4 @@
 (executable
- (name ospike)
- (libraries core re2)
+ (name ospike_cli)
+ (libraries ospike)
  (preprocess (pps ppx_jane)))

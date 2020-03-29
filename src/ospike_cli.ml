@@ -1,3 +1,5 @@
+open Ospike
+
 (*********** COMMAND LINE TOOL ***********)
 let command = 
   Core.Command.basic 
