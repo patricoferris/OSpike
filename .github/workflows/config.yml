@@ -16,7 +16,7 @@ jobs:
         uses: avsm/setup-ocaml@v1.0
         with:
           ocaml-version: ${{ matrix.ocaml-version }}
-      - run: opam pin add ospike -n .
+      - run: opam pin add ospike.dev -n .
       - run: opam depext -yt ospike
       - name: Install Deps
         run: opam install -t . --deps-only

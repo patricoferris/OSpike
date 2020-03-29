@@ -1,6 +1,5 @@
 opam-version: "2.0"
-name: "OSpike"
-version: "~dev"
+name: "ospike"
 synopsis: "A CLI Tool for working with Spike - the RISC-V ISA Simulator"
 maintainer: "patricoferris <patrickferris17@gmail.com>"
 authors: "patricoferris <patrickferris17@gmail.com>"
@@ -14,7 +13,17 @@ depends: [
   "alcotest" {with-test}
 ]
 build: [
-  ["dune" "build" "-p" name "-j" jobs]
-  ["dune" "runtest" "-p" name "-j" jobs] {with-test}
+  ["dune" "subst"] {pinned}
+  [
+    "dune"
+    "build"
+    "-p"
+    name
+    "-j"
+    jobs
+    "@install"
+    "@runtest" {with-test}
+    "@doc" {with-doc}
+  ]
 ]
-dev-repo: "git+https://github.com/patricoferris/OSpike.git"
+dev-repo: "git+https://github.com/patricoferris/ospike.git"
