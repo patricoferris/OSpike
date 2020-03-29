@@ -1,4 +1,4 @@
-name: OSpike
+name: ospike
 on: [push]
 jobs:
   run:

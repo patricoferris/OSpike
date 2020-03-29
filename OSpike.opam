@@ -1,11 +1,11 @@
 opam-version: "2.0"
 name: "ospike"
-synopsis: "A CLI Tool for working with Spike - the RISC-V ISA Simulator"
+synopsis: "A CLI Tool for working with Spike - the RISC-V ISA Simulator - logs"
 maintainer: "patricoferris <patrickferris17@gmail.com>"
 authors: "patricoferris <patrickferris17@gmail.com>"
 license: "ISC"
-homepage: "https://github.com/patricoferris/OSpike"
-bug-reports: "https://github.com/patricoferris/OSpike/issues"
+homepage: "https://github.com/patricoferris/ospike"
+bug-reports: "https://github.com/patricoferris/ospike/issues"
 depends: [
   "dune" {>= "2.3"}
   "core" 
