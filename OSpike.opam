@@ -11,8 +11,10 @@ depends: [
   "dune" {>= "2.3"}
   "core" 
   "re2"
+  "alcotest" {with-test}
 ]
 build: [
   ["dune" "build" "-p" name "-j" jobs]
+  ["dune" "runtest" "-p" name "-j" jobs] {with-test}
 ]
 dev-repo: "git+https://github.com/patricoferris/OSpike.git"
