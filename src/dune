@@ -1,6 +1,6 @@
 (executable
  (name ospike)
  (public_name ospike)
- (libraries ospike)
+ (libraries ospike_lib)
  (flags :standard -g)
  (preprocess (pps ppx_jane)))

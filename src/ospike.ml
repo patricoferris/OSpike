@@ -1,4 +1,4 @@
-open Ospike
+open Ospike_lib
 
 (*********** COMMAND LINE TOOL ***********)
 let command = 

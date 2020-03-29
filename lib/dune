@@ -1,4 +1,4 @@
 (library
- (name ospike)
+ (name ospike_lib)
  (libraries core re2)
  (preprocess (pps ppx_jane)))

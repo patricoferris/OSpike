@@ -1,4 +1,4 @@
-open Ospike
+open Ospike_lib
 
 let equal_buffer a b = a = b
 let pp_buffer ppf buffer = Fmt.pf ppf "Buffer: %s" (Queue.fold (fun acc i -> acc ^ (string_of_int i)) "" (Buffer.get_data buffer))
