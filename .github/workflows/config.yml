@@ -1,17 +1,16 @@
-name: OSpike Testing
-on: [push, pull_request]
+name: OSpike
+on: [push]
 jobs:
   run:
-    name: Build
+    name: Tests
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
         os: [ubuntu-latest]
         ocaml-version: ["4.07.0", "4.08.1"]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2.0.0
+        uses: actions/checkout@master
       - name: Use OCaml ${{ matrix.ocaml-version }}
         uses: avsm/setup-ocaml@v1.0
         with:
