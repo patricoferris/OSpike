@@ -39,7 +39,7 @@ let add_to_table freq_tbl instr_group =
 
 let add_instruction buff tbl str = 
   let instr = parse_line str in 
-  let _ = Buffer.push instr buff in 
+  let _ : unit = Buffer.push instr buff in 
     if Buffer.is_full buff then add_to_table tbl (Buffer.copy buff)
 
 let print_sorted oc tbl options = 

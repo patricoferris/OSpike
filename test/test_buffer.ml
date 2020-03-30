@@ -7,15 +7,15 @@ let buffer_testable = Alcotest.testable pp_buffer equal_buffer
 
 let test_create () = 
   let buffer1 = Buffer.create 1 in
-  let _ = Buffer.push 10 buffer1 in 
+  let _ : unit = Buffer.push 10 buffer1 in 
   let q = Queue.create () in 
-  let _ = Queue.push 10 q in 
+  let _ : unit = Queue.push 10 q in 
   let buffer2 : int Buffer.t = { capacity = 1; data = q } in 
     Alcotest.check buffer_testable "Same buffers" buffer1 buffer2
 
 let test_push_pop () = 
   let buff = Buffer.create 2 in 
-  let _ = Buffer.push 1 buff; Buffer.push 2 buff in 
+  let _ : unit = Buffer.push 1 buff; Buffer.push 2 buff in 
   let first = Buffer.pop buff in 
   let second = Buffer.pop buff in 
     Alcotest.(check (option int)) "same first ints" (Some 1) first; 
@@ -23,7 +23,7 @@ let test_push_pop () =
 
 let test_push_and_drop () = 
   let buff = Buffer.create 2 in 
-  let _ = Buffer.push 1 buff; Buffer.push 2 buff; Buffer.push 3 buff in 
+  let _ : unit = Buffer.push 1 buff; Buffer.push 2 buff; Buffer.push 3 buff in 
   let two = Buffer.pop buff in 
   let three = Buffer.pop buff in 
     Alcotest.(check (option int)) "same first ints" (Some 2) two; 
