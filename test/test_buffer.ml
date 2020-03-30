@@ -31,8 +31,8 @@ let test_push_and_drop () =
 
 let test_pop_none () = 
   let buff = Buffer.create 1 in 
-  let _ = Buffer.push 1 buff in 
-  let none = ignore (Buffer.pop buff); Buffer.pop buff in 
+  let _ : unit = Buffer.push 1 buff in 
+  let none = ignore ((Buffer.pop buff) : int option); Buffer.pop buff in 
     Alcotest.(check (option int)) "none" None none
 
 let () = 

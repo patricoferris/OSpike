@@ -9,7 +9,7 @@ let pop buff =
     Some (Queue.pop buff.data)
 
 let push el buff = 
-  if get_size buff = buff.capacity then (ignore (pop buff); Queue.push el buff.data)
+  if get_size buff = buff.capacity then let _drop = pop buff in Queue.push el buff.data
   else Queue.push el buff.data 
 
 let copy buff = { capacity = buff.capacity; data = Queue.copy buff.data }
