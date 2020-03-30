@@ -43,7 +43,7 @@ let add_instruction buff tbl str =
     if Buffer.is_full buff then add_to_table tbl (Buffer.copy buff)
 
 let print_sorted oc tbl options = 
-  let key_values = List.sort (fun (_, v1) (_, v2) -> -Pervasives.compare v1 v2) (List.of_seq (Hashtbl.to_seq tbl)) in 
+  let key_values = List.sort (fun (_, v1) (_, v2) -> -Stdlib.compare v1 v2) (List.of_seq (Hashtbl.to_seq tbl)) in 
   let print_kv (k, v) = Riscv.print_instr_group oc k; Printf.fprintf oc "%s\n" (": " ^ (string_of_int v)) in 
     List.iter print_kv key_values; Printf.fprintf oc "\n%s\n" ("Total Number of Instructions: " ^ string_of_int ((List.fold_left (fun acc (_k, v) -> acc + v) 0 key_values) + options.group - 1 ))
 
