@@ -13,10 +13,28 @@ dune build
 dune install 
 ```
 
-Some of the options for configuring what the tool does includes: 
+Some of the options for configuring what the tool does includes (`ospike -help`): 
 
- - `-o <filename>` will output the results to file with that name. 
- - `-lower <int>` and `-upper <int>` specify the inclusive addresses to not ignore when analysing the dynamic instruction stream. 
- - `-group <int>` when this is set the tool will look at the most common groupings of adjacent instructions and output them. For now this is done by matching the name.  
+```
+🐫  OSpike - a tool for parsing Spike logs with OCaml  🐫
+
+  ospike [mode - <stdin|file>]
+
+=== flags ===
+
+  [-compare mode]       how to compare instructions - default is without
+                        registers, any other string will use registers
+  [-group size]         the size of the groups of adjacent instructions to look
+                        at (default 1)
+  [-lower lower-bound]  on the address range to include in the stats (yet to be
+                        implemented)
+  [-o filename]         location for the results to be stored
+  [-upper upper-bound]  on the address range to include in the stats (yet to be
+                        implemented)
+  [-build-info]         print info about this build and exit
+  [-version]            print the version of this build and exit
+  [-help]               print this help text and exit
+                        (alias: -?)
+```
 
  (🆁🅸🆂🅲-🆅 + 🐪)
