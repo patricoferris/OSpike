@@ -55,7 +55,7 @@ let add_to_table freq_tbl instr_group =
 
 let print_sorted oc tbl (options : Parser_options.t) = 
   let key_values = List.sort (fun (_, v1) (_, v2) -> -Stdlib.compare v1 v2) (Hashtbl.to_alist tbl) in 
-  let print_kv (k, v) = Buff.print_buffer (Riscv.print_instr oc) k; Printf.fprintf oc "%s\n" (": " ^ (string_of_int v)) in 
+  let print_kv (k, v) = Buff.print_buffer (fun i -> Riscv.print_instr oc i options.compare_mode) k; Printf.fprintf oc "%s\n" (": " ^ (string_of_int v)) in 
     List.iter print_kv key_values; Printf.fprintf oc "\n%s\n" ("Total Number of Instructions: " ^ string_of_int ((List.fold_left (fun acc (_k, v) -> acc + v) 0 key_values) + options.group - 1 ))
 
 let from_stdin (options : Parser_options.t) = 

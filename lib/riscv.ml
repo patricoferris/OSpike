@@ -46,10 +46,12 @@ let string_of_option = function
   | None   -> "none"
   | Some s -> s 
 
-let print_instr oc instr = 
-  let s_list = [instr.instr_name; (string_of_option instr.arg1); (string_of_option instr.arg2); (string_of_option instr.arg3)] in 
-  let s = String.concat ~sep:" " s_list in 
-    Printf.fprintf oc "(%s)" s
+let print_instr oc instr = function 
+  | Parser_options.Instr -> Printf.fprintf oc "(%s)" instr.instr_name
+  | Parser_options.Instr_Reg -> 
+    let s_list = [instr.instr_name; (string_of_option instr.arg1); (string_of_option instr.arg2); (string_of_option instr.arg3)] in 
+    let s = String.concat ~sep:" " s_list in 
+      Printf.fprintf oc "(%s)" s
 
 let compare = function 
   | P.Instr -> 

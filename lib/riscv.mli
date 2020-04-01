@@ -16,7 +16,7 @@ val unknown : t
 val instr_of_match: Re2.Match.t -> t 
 (** Takes a match from the parser (regex) and returns an instruction *)
 
-val print_instr : out_channel -> t -> unit 
+val print_instr : out_channel -> t -> Parser_options.compare -> unit 
 (** Prints a RISC-V instruction *)
 
 val compare : Parser_options.compare -> t -> t -> int 
