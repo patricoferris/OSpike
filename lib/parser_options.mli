@@ -6,3 +6,5 @@ type t = {
   group: int; 
   compare_mode: compare
 }
+
+val to_string : t -> string 

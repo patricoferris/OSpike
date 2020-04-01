@@ -21,7 +21,10 @@ let command =
                 else {lower; upper; group; compare_mode=Parser_options.Instr_Reg} in 
                 begin match output with 
                   | None -> Parser.(print_sorted stdout (from_stdin options) options)
-                  | Some file -> Parser.(print_sorted (open_out file) (from_stdin options) options)
+                  | Some file -> 
+                    let oc = open_out file in 
+                      Printf.fprintf oc "%s\n" (Parser_options.to_string options);
+                      Parser.(print_sorted oc (from_stdin options) options)
                   end
             | Some "file"  -> print_endline "File"
             | None | Some _ -> print_endline "Please provide which mode <stdin|file> you wish to use"

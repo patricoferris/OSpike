@@ -11,7 +11,7 @@ module type RiscvComparator = sig
 end 
 
 module type HashableBuffer = sig 
-  include Base__.Hashtbl_intf.Key with type t = Riscv.t Buff.t
+  include Hashtbl.Key with type t = Riscv.t Buff.t
   val copy : t -> t 
 end
 
@@ -19,6 +19,7 @@ module MakeHashableBuffer (C : RiscvComparator) = struct
   type t = Riscv.t Buff.t
   let compare a b = Buff.compare (C.compare) a b 
   let sexp_of_t t = Buff.sexp_of_t Riscv.sexp_of_t t 
+  let t_of_sexp s = Buff.t_of_sexp Riscv.t_of_sexp s
   let copy a : t = Buff.copy a 
   let hash buff = Buff.BuffQueue.fold ~f:(fun acc instr -> acc + (C.hash instr)) ~init:0 (Buff.get_data buff)
 end
@@ -58,7 +59,6 @@ let print_sorted oc tbl (options : Parser_options.t) =
     List.iter print_kv key_values; Printf.fprintf oc "\n%s\n" ("Total Number of Instructions: " ^ string_of_int ((List.fold_left (fun acc (_k, v) -> acc + v) 0 key_values) + options.group - 1 ))
 
 let from_stdin (options : Parser_options.t) = 
-  if options.compare_mode = Parser_options.Instr then print_endline "HELLLLLLLLO";
   let module Compare = struct 
     let compare = Riscv.compare options.compare_mode 
     let hash = Riscv.hash options.compare_mode 

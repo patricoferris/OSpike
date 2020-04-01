@@ -4,7 +4,7 @@ module type RiscvComparator = sig
 end 
 
 module type HashableBuffer = sig 
-  include Base__.Hashtbl_intf.Key with type t = Riscv.t Buff.t
+  include Core.Hashtbl.Key with type t = Riscv.t Buff.t
   val copy : t -> t 
 end
 
