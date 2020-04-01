@@ -53,7 +53,7 @@ let print_instr oc instr =
 
 let compare = function 
   | P.Instr -> 
-    fun a b -> print_endline "STRING!"; String.compare a.instr_name b.instr_name
+    fun a b -> String.compare a.instr_name b.instr_name
   | P.Instr_Reg ->   
     fun a b ->
       let instr1 = [a.instr_name; string_of_option a.arg1; string_of_option a.arg2; string_of_option a.arg3] in 
@@ -62,7 +62,7 @@ let compare = function
 
 let hash = function 
   | P.Instr -> 
-    fun instr -> print_endline "STRING HASH!"; Hashtbl.hash instr.instr_name
+    fun instr -> Hashtbl.hash instr.instr_name
   | P.Instr_Reg ->   
     fun instr ->
       let h = Hashtbl.hash in 
