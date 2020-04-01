@@ -8,6 +8,7 @@ type t = {
 }
   and addr = int
   and reg = string 
+[@@deriving compare, sexp, hash]
 
 val unknown : t 
 (** Unknown instruction type *)
@@ -18,5 +19,8 @@ val instr_of_match: Re2.Match.t -> t
 val print_instr : out_channel -> t -> unit 
 (** Prints a RISC-V instruction *)
 
-val print_instr_group : out_channel -> t Buffer.t -> unit 
-(** Prints a RISC-V instruction group *)
+val compare : Parser_options.compare -> t -> t -> int 
+(** Custom compare function to work with the hash function *)
+
+val hash : Parser_options.compare -> t -> int 
+(** Custom hash function for only checking instruction name and registers *)

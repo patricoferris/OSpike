@@ -1,4 +1,14 @@
-type 'a t = { mutable capacity : int; data: 'a Queue.t }
+open Core 
+
+module BuffQueue : sig
+  include Queue.S
+  val compare : ('a -> 'a -> int) -> 'a t -> 'a t -> int 
+  val create : ?capacity:int -> unit -> 'a t
+  val hash_fold_t : (Hash.state -> 'a -> Hash.state) -> Hash.state -> 'a t -> Hash.state
+end 
+
+type 'a t = { capacity : Int.t; data: 'a BuffQueue.t } 
+[@@deriving compare, sexp, hash]
 
 val create : int -> 'a t 
 (** Creates a new buffer with a max capacity *)
@@ -21,5 +31,5 @@ val print_buffer : ('a -> unit) -> 'a t -> unit
 val copy : 'a t -> 'a t 
 (** Creates a copy of the data *)
 
-val get_data : 'a t -> 'a Queue.t
+val get_data : 'a t -> 'a BuffQueue.t
 (** Extract the underlying queue *)

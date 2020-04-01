@@ -1,5 +1,7 @@
+open Core 
+
 type t = {
-  instr_name: string; 
+  instr_name: String.t; 
   arg1: reg option; 
   arg2: reg option; 
   arg3: reg option;
@@ -8,9 +10,11 @@ type t = {
 }
   and addr = int
   and reg = string 
+[@@deriving compare, sexp, hash]
 
 module R = Re2
 module M = R.Match
+module P = Parser_options
 
 let unknown = {
   instr_name = "Unknown Instruction";
@@ -44,9 +48,22 @@ let string_of_option = function
 
 let print_instr oc instr = 
   let s_list = [instr.instr_name; (string_of_option instr.arg1); (string_of_option instr.arg2); (string_of_option instr.arg3)] in 
-  let s = String.concat " " s_list in 
+  let s = String.concat ~sep:" " s_list in 
     Printf.fprintf oc "(%s)" s
 
-let print_instr_group oc buff =
-  Buffer.print_buffer (print_instr oc) buff 
-  (* List.iter (fun instr -> print_instr oc instr; print_string " ") lst  *)
+let compare = function 
+  | P.Instr -> 
+    fun a b -> print_endline "STRING!"; String.compare a.instr_name b.instr_name
+  | P.Instr_Reg ->   
+    fun a b ->
+      let instr1 = [a.instr_name; string_of_option a.arg1; string_of_option a.arg2; string_of_option a.arg3] in 
+      let instr2 = [b.instr_name; string_of_option b.arg1; string_of_option b.arg2; string_of_option b.arg3] in 
+        List.compare (String.compare) instr1 instr2
+
+let hash = function 
+  | P.Instr -> 
+    fun instr -> print_endline "STRING HASH!"; Hashtbl.hash instr.instr_name
+  | P.Instr_Reg ->   
+    fun instr ->
+      let h = Hashtbl.hash in 
+        (h instr.instr_name) + (h instr.arg1) + (h instr.arg2) + (h instr.arg3)

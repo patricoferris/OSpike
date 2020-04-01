@@ -1,0 +1,7 @@
+(sd zero 0(a0) none): 4
+(c.addi a5 8 none): 2
+(bne s0 a5  pc - 12): 2
+(c.add a0 a5 none): 2
+(re t none none): 1
+
+Total Number of Instructions: 11

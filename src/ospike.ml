@@ -11,15 +11,18 @@ let command =
         and lower  = flag "-lower" (optional int) ~doc:"lower-bound on the address range to include in the stats"
         and upper  = flag "-upper" (optional int) ~doc:"upper-bound on the address range to include in the stats"
         and group  = flag "-group" (optional_with_default 1 int) ~doc:"size of the groups of adjacent instruction to look at (default 1)"
+        and compare_mode = flag "-compare" (optional_with_default "instr" string) ~doc:"how to compare instructions - by name or include registers"
       in
         fun () -> 
           match mode with 
             | Some "stdin" -> 
-              let options : Parser.t = {lower; upper; group} in 
+              let options : Parser_options.t = 
+                if compare_mode = "instr" then {lower; upper; group; compare_mode=Parser_options.Instr} 
+                else {lower; upper; group; compare_mode=Parser_options.Instr_Reg} in 
                 begin match output with 
                   | None -> Parser.(print_sorted stdout (from_stdin options) options)
                   | Some file -> Parser.(print_sorted (open_out file) (from_stdin options) options)
-                end
+                  end
             | Some "file"  -> print_endline "File"
             | None | Some _ -> print_endline "Please provide which mode <stdin|file> you wish to use"
     )

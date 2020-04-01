@@ -1,3 +1,4 @@
 (test
 	(name test_buffer)
-  (libraries ospike_lib alcotest))
+  (libraries core ospike_lib alcotest)
+  (preprocess (pps ppx_jane)))
