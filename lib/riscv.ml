@@ -5,8 +5,8 @@ type t = {
   arg1: reg option; 
   arg2: reg option; 
   arg3: reg option;
-  address: addr option;
-  opcode: int option;
+  address: addr;
+  opcode: int;
 }
   and addr = int
   and reg = string 
@@ -21,13 +21,13 @@ let unknown = {
   arg1 = None; 
   arg2 = None; 
   arg3 = None;
-  address = None;
-  opcode = None;
+  address = 42;
+  opcode = 42;
 }
 
 let int_of_hexstring = function 
-  | None -> None 
-  | Some str -> Some (int_of_string str)
+  | None -> 42 
+  | Some str -> int_of_string str
 
 let name = function 
   | None   -> "unknown"

@@ -59,16 +59,22 @@ let print_sorted oc tbl (options : Parser_options.t) =
     List.iter print_kv key_values; Printf.fprintf oc "\n%s\n" ("Total Number of Instructions: " ^ string_of_int ((List.fold_left (fun acc (_k, v) -> acc + v) 0 key_values) + options.group - 1 ))
 
 let from_stdin (options : Parser_options.t) = 
+  let lower = options.lower in 
+  let upper = options.upper in 
   let module Compare = struct 
     let compare = Riscv.compare options.compare_mode 
     let hash = Riscv.hash options.compare_mode 
   end in 
   let module HB = MakeHashableBuffer(Compare) in 
-  let add_instruction buff tbl str = 
+  let add_instruction buff tbl lower upper str = 
     let instr = parse_line str in 
-    let _ : unit = Buff.push instr buff in 
-      if Buff.is_full buff then add_to_table tbl (HB.copy buff) in 
+    begin match (lower, upper) with 
+      | (None, None) -> Buff.push instr buff (* ignoring any address range limiting *)
+      | (Some l, Some h) when instr.address <= h && instr.address >= l -> print_endline ((string_of_int h) ^ "   " ^ (string_of_int instr.address)); Buff.push instr buff
+      | (_, _) -> print_endline "popp"; Buff.pop buff |> ignore
+    end;
+    if Buff.is_full buff then add_to_table tbl (HB.copy buff) in 
   let buffer = Buff.create options.group in 
   let freq_tbl = Core.Hashtbl.create (module HB) in
-  let _s = read_stream (add_instruction buffer freq_tbl) 1 stdin in 
+  let _s = read_stream (add_instruction buffer freq_tbl lower upper) 1 stdin in 
     freq_tbl
