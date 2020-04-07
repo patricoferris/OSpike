@@ -3,8 +3,8 @@ type t = {
   arg1: reg option; 
   arg2: reg option; 
   arg3: reg option;
-  address: addr option;
-  opcode: int option;
+  address: addr;
+  opcode: int
 }
   and addr = int
   and reg = string 
