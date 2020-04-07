@@ -24,7 +24,7 @@ module MakeHashableBuffer (C : RiscvComparator) = struct
   let hash buff = Buff.BuffQueue.fold ~f:(fun acc instr -> acc + (C.hash instr)) ~init:0 (Buff.get_data buff)
 end
 
-let instr_regex = Re2.create_exn "core[\\s]+0:\\s(?P<address>[0-9abcdefx]+)[\\s]+\\((?P<opcode>[0-9abcdefx]+)\\)\\s(?P<instr>[\\w\\.]+)[\\s]*(?P<first>[\\w\\s\\(\\)]+)[,]*[\\s]*(?P<second>[\\w\\s\\(\\)]+)*[,]*(?P<third>[\\w\\s-\\(\\)]+)*"
+let instr_regex = Re2.create_exn "core[\\s]+0:\\s(?P<address>[0-9abcdefx]+)[\\s]+\\((?P<opcode>[0-9abcdefx]+)\\)\\s(?P<instr>[\\w\\.]+)[\\s]*(?P<first>[\\w\\s\\(\\)]+)[,]*[\\s]*(?P<second>[\\w\\s\\(\\)0x]+)*[,]*(?P<third>[\\w\\s-\\(\\)0x]+)*"
 
 let parse_line line = 
   let matching = Re2.first_match instr_regex line in 
