@@ -70,7 +70,7 @@ let from_stdin (options : Parser_options.t) =
     let instr = parse_line str in 
     begin match (lower, upper) with 
       | (None, None) -> Buff.push instr buff (* ignoring any address range limiting *)
-      | (Some l, Some h) when instr.address <= h && instr.address >= l -> print_endline ((string_of_int h) ^ "   " ^ (string_of_int instr.address)); Buff.push instr buff
+      | (Some l, Some h) when instr.address <= h && instr.address >= l -> Buff.push instr buff
       | (_, _) -> (Buff.pop buff : Riscv.t option) |> ignore
     end;
     if Buff.is_full buff then add_to_table tbl (HB.copy buff) in 
