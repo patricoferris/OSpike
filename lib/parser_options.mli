@@ -1,4 +1,4 @@
-type compare = Instr | Instr_Reg 
+type compare = Instr | Instr_Reg | Full
 
 type t = {
   lower: int option;

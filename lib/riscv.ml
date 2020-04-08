@@ -46,7 +46,11 @@ let string_of_option = function
   | None   -> "none"
   | Some s -> s 
 
-let print_instr oc instr = function 
+let print_instr oc instr = function
+  | Parser_options.Full  -> 
+    let instr_list = [(Printf.sprintf "%0#16x" instr.address); instr.instr_name; (string_of_option instr.arg1); (string_of_option instr.arg2); (string_of_option instr.arg3)] in 
+    let s = String.concat ~sep:" " instr_list in 
+      Printf.fprintf oc "(%s)" s
   | Parser_options.Instr -> Printf.fprintf oc "(%s)" instr.instr_name
   | Parser_options.Instr_Reg -> 
     let s_list = [instr.instr_name; (string_of_option instr.arg1); (string_of_option instr.arg2); (string_of_option instr.arg3)] in 
@@ -54,6 +58,8 @@ let print_instr oc instr = function
       Printf.fprintf oc "(%s)" s
 
 let compare = function 
+  | P.Full  -> 
+    fun a b -> compare a b 
   | P.Instr -> 
     fun a b -> String.compare a.instr_name b.instr_name
   | P.Instr_Reg ->   
@@ -63,6 +69,8 @@ let compare = function
         List.compare (String.compare) instr1 instr2
 
 let hash = function 
+  | P.Full -> 
+    fun instr -> Hashtbl.hash instr 
   | P.Instr -> 
     fun instr -> Hashtbl.hash instr.instr_name
   | P.Instr_Reg ->   

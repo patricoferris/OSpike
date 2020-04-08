@@ -1,4 +1,4 @@
-type compare = Instr | Instr_Reg 
+type compare = Instr | Instr_Reg | Full
 
 type t = {
   lower: int option;
@@ -8,6 +8,7 @@ type t = {
 }
 
 let compare_to_string = function 
+  | Full -> "full hash and compare (including address)"
   | Instr -> "instruction name"
   | Instr_Reg -> "instruction and registers"
 

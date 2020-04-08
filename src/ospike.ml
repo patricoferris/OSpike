@@ -18,6 +18,7 @@ let command =
             | Some "stdin" -> 
               let options : Parser_options.t = 
                 if compare_mode = "instr" then {lower; upper; group; compare_mode=Parser_options.Instr} 
+                else if compare_mode = "full" then {lower; upper; group; compare_mode=Parser_options.Full}
                 else {lower; upper; group; compare_mode=Parser_options.Instr_Reg} in 
                 begin match output with 
                   | None -> Parser.(print_sorted stdout (from_stdin options) options)
