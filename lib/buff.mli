@@ -31,5 +31,8 @@ val print_buffer : ('a -> unit) -> 'a t -> unit
 val copy : 'a t -> 'a t 
 (** Creates a copy of the data *)
 
+val get_size : 'a t -> int 
+(** Gets the length of the underlying queue *)
+
 val get_data : 'a t -> 'a BuffQueue.t
 (** Extract the underlying queue *)

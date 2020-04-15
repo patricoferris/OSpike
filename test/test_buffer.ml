@@ -37,10 +37,18 @@ let test_pop_none () =
   let none = ignore ((Buff.pop buff) : int option); Buff.pop buff in 
     Alcotest.(check (option int)) "none" None none
 
+let test_copy () = 
+  let buff = Buff.create 1 in 
+  let copy = Buff.copy buff in 
+  let _ : unit = Buff.push 1 buff in 
+    Alcotest.(check int) "buff one contains 1" 1 (Buff.get_size buff);
+    Alcotest.(check int) "copy contains nothing" 0 (Buff.get_size copy)
+
 let () = 
   Alcotest.run "Buff Tests"
     [ ( "Buff", 
       [ Alcotest.test_case "Create new Buff" `Quick test_create;
         Alcotest.test_case "Queue semantics" `Quick test_push_pop;
         Alcotest.test_case "Drop entries over capacity" `Quick test_push_and_drop;
-        Alcotest.test_case "Return none from empty Buff" `Quick test_pop_none ])]
+        Alcotest.test_case "Return none from empty Buff" `Quick test_pop_none;
+        Alcotest.test_case "Copying buffers works" `Quick test_copy ])]
