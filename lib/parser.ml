@@ -32,21 +32,12 @@ let parse_line line =
     | Ok instr -> Riscv.instr_of_match instr
     | Error _  -> Riscv.unknown
 
-let _read_lines n ic =
-	let rec lines acc = function
-		| 0 -> List.rev acc
-		| n -> lines ((input_line ic) :: acc) (n - 1)
-	in
-		lines [] n
-
 let stream_lines _n ic = 
   Stream.from 
-    (fun _ -> try Some (input_line (*read_lines n*) ic) with End_of_file -> None)
+    (fun _ -> try Some (input_line ic) with End_of_file -> None)
 
 let read_stream f n ic = 
   Stream.iter (fun lines -> f lines) (stream_lines n ic)
-
-let _check_bounds lower upper current = current >= lower && current <= upper
 
 let add_to_table freq_tbl instr_group =
   let f = (Hashtbl.find freq_tbl instr_group) in match f with 
