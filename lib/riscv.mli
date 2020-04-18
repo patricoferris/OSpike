@@ -19,6 +19,9 @@ val instr_of_match: Re2.Match.t -> t
 val print_instr : out_channel -> t -> Parser_options.compare -> unit 
 (** Prints a RISC-V instruction *)
 
+val to_string : t -> string 
+(** Converts a RISC-V instruction to string *)
+
 val compare : Parser_options.compare -> t -> t -> int 
 (** Custom compare function to work with the hash function *)
 

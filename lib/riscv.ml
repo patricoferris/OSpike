@@ -57,6 +57,10 @@ let print_instr oc instr = function
     let s = String.concat ~sep:" " s_list in 
       Printf.fprintf oc "(%s)" s
 
+let to_string instr = 
+  let instr_list = [(Printf.sprintf "%0#16x" instr.address); instr.instr_name; (string_of_option instr.arg1); (string_of_option instr.arg2); (string_of_option instr.arg3)] in 
+    String.concat ~sep:" " instr_list
+
 let compare = function 
   | P.Full  -> 
     fun a b -> compare a b 

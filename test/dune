@@ -1,4 +1,4 @@
-(test
-	(name test_buffer)
+(tests
+	(names test_buffer test_parser)
   (libraries core ospike_lib alcotest)
   (preprocess (pps ppx_jane)))
