@@ -11,10 +11,9 @@ depends: [
   "core" 
   "re2"
   "alcotest" {with-test}
-  "ocaml-mdx" {with-test}
+  "mdx" {with-test}
 ]
 build: [
-  ["dune" "subst"] {pinned}
   [
     "dune"
     "build"
