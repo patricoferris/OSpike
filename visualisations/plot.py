@@ -76,7 +76,6 @@ def parse_single_instruction(line):
     if ins[0] != 'Unknown Instruction' and len(ins[0]) <= 10:
       return (ins[0][1:-1], int(ins[1]))
 
-
 def add_to_instruction(lst, ins): 
   if ins != None:
     if ins[0] != 'Unknown Instruction' and ins[1] != 'Unknown Instruction':
@@ -106,13 +105,22 @@ def frequency_plot(instructions):
   plt.xticks(rotation=45)
   fig.savefig("original-riscv-fq.pdf", format='pdf', bbox_inches='tight')
 
-def heatmap(instructions, title="", first_n=10): 
+def heatmap(instructions, file='heat.pdf', title="", first_n=10): 
   df = pd.DataFrame.from_records(instructions[:first_n], columns =['Instruction One', 'Instruction Two', 'Frequency'])
   result = df.pivot(index='Instruction One', columns='Instruction Two', values='Frequency').fillna(0)
   fig, ax = plt.subplots(figsize=set_size(default_width))
   sns.heatmap(result, ax=ax, fmt="g", cmap='YlOrRd')
   plt.title(title)
-  fig.savefig('heat.pdf', format='pdf', bbox_inches='tight')
+  fig.savefig(file, format='pdf', bbox_inches='tight')
+
+def get_total(filepath):
+  with open(filepath) as fp:
+    header = fp.readline()
+    line = fp.readline()
+    while line:
+      if "Total Number of Instructions" in line: 
+        return int(line.split(": ")[1])
+      line = fp.readline()
 
 def instructions(filepath, parse_pair=False, normalise=False):
   with open(filepath) as fp:
@@ -132,7 +140,36 @@ def instructions(filepath, parse_pair=False, normalise=False):
       for i in range(len(instructions)): 
         instructions[i] = (instructions[i][0], instructions[i][1] / total)
     return instructions
-  
+
+def compare_plot(comp_dict, title="", xlabel="", filename="", y_bottom=0.99): 
+  og = []
+  mod = []
+  inline = []
+  files = []
+  for key in comp_dict: 
+    files.append(key)
+    print(files)
+    ogg = get_total(comp_dict[key][0])
+    oc = get_total(comp_dict[key][1])
+    inl = get_total(comp_dict[key][2])
+    og.append(1)
+    mod.append(oc / ogg)
+    inline.append(inl / ogg)
+  fig, ax = plt.subplots(figsize=set_size(default_width))
+  w=0.2
+  ids = np.arange(len(og))
+  ax.set_ylim(bottom=y_bottom, top=1.002)
+  ax.bar(ids-w, og, width=w, align='center', label='original')
+  ax.bar(ids,   mod, width=w, align='center', label='rv64GO')
+  ax.bar(ids+w, inline, width=w, align='center', label='rv64GO+inline')  
+  ax.axhline(1.0, color='orange', ls='--')
+  ax.legend()
+  plt.xticks(ticks=ids, labels=files)
+  plt.title(title)
+  plt.xlabel(xlabel)
+  plt.ylabel("Dynamic Instructions (normalised to unmodified compiler)")
+  fig.savefig(filename + '.pdf', format='pdf', bbox_inches='tight')
+
 def multiple_plot(filepaths, noramlise_all=False): 
   all_instructions = {}
   for filepath in filepaths: 
@@ -166,8 +203,8 @@ def multiple_plot(filepaths, noramlise_all=False):
     )
 
 # For heatmap
-filepath = '/Users/patrickferris/scratch/log/pattern-compare-utils.ospike'
-  
+# filepath = '/Users/patrickferris/scratch/log/pattern-compare-utils.ospike'
+filepath = '/Users/patrickferris/scratch/log/yojson-original/yj-comp-stdlibend.log'
 # For multiple files
 files = [
   "/Users/patrickferris/scratch/log/uncomp/gc-original-riscv.log",
@@ -178,14 +215,90 @@ files = [
   "/Users/patrickferris/scratch/log/uncomp/zerotypes-original-riscv.log"
 ]
 
+compare = {
+  "gc" : [
+    "/Users/patrickferris/scratch/log/final/cross-original.riscv/riscv/gc.log",
+    "/Users/patrickferris/scratch/log/final/cross.riscv/riscv/gc.log",
+    "/Users/patrickferris/scratch/log/final/cross-inline.riscv/riscv/gc.log",
+  ],
+  "intfloatarray" : [
+    "/Users/patrickferris/scratch/log/final/cross-original.riscv/riscv/intfloatarray.log",
+    "/Users/patrickferris/scratch/log/final/cross.riscv/riscv/intfloatarray.log",
+    "/Users/patrickferris/scratch/log/final/cross-inline.riscv/riscv/intfloatarray.log",
+  ],
+  "pattern" : [
+    "/Users/patrickferris/scratch/log/final/cross-original.riscv/riscv/pattern.log",
+    "/Users/patrickferris/scratch/log/final/cross.riscv/riscv/pattern.log",
+    "/Users/patrickferris/scratch/log/final/cross-inline.riscv/riscv/pattern.log",
+  ],
+  "someornone" : [
+    "/Users/patrickferris/scratch/log/final/cross-original.riscv/riscv/someornone.log",
+    "/Users/patrickferris/scratch/log/final/cross.riscv/riscv/someornone.log",
+    "/Users/patrickferris/scratch/log/final/cross-inline.riscv/riscv/someornone.log",
+  ],
+  "sorting" : [
+    "/Users/patrickferris/scratch/log/final/cross-original.riscv/riscv/sorting.log",
+    "/Users/patrickferris/scratch/log/final/cross.riscv/riscv/sorting.log",
+    "/Users/patrickferris/scratch/log/final/cross-inline.riscv/riscv/sorting.log",
+  ],
+  "zerotypes" : [
+    "/Users/patrickferris/scratch/log/final/cross-original.riscv/riscv/zerotypes.log",
+    "/Users/patrickferris/scratch/log/final/cross.riscv/riscv/zerotypes.log",
+    "/Users/patrickferris/scratch/log/final/cross-inline.riscv/riscv/zerotypes.log",
+  ],
+}
+
+compare_fft = {
+  "fft" : [
+    "/Users/patrickferris/scratch//log/cross-original-num/fft.log",
+    "/Users/patrickferris/scratch//log/cross-num/fft.log",
+    "/Users/patrickferris/scratch//log/cross-inline-num/fft.log",
+  ]
+}
+
+compare_oclea = {
+  "gc" : [
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-original/gc.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv/gc.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-inline/gc.log",
+  ],
+  "intfloatarray" : [
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-original/intfloatarray.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv/intfloatarray.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-inline/intfloatarray.log",
+  ],
+  "pattern" : [
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-original/pattern.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv/pattern.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-inline/pattern.log",
+  ],
+  "someornone" : [
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-original/someornone.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv/someornone.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-inline/someornone.log",
+  ],
+  "sorting" : [
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-original/sorting.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv/sorting.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-inline/sorting.log",
+  ],
+  "zerotypes" : [
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-original/zerotypes.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv/zerotypes.log",
+    "/Users/patrickferris/scratch/log/final-oclea-riscv-inline/zerotypes.log",
+  ],
+}
+
 if len(sys.argv) < 1:
   print("Please provide multiple or heatmap")
 else:
   if sys.argv[1] == "multiple":
     multiple_plot(files, noramlise_all=True)
+  elif sys.argv[1] == "compare": 
+    compare_plot(compare, filename="final", y_bottom=0.95)
   else:
     insn = instructions(filepath, parse_pair=True)
-    heatmap(insn, title="A heatmap of pairs of instructions for \\texttt{pattern.ml}", first_n=30)
+    heatmap(insn, file="heat-yj.pdf", title="A heatmap of pairs of instructions for \\texttt{pattern.ml}", first_n=30)
 
 
   
