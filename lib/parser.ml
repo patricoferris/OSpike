@@ -40,8 +40,9 @@ end
 
 module StringLineParser : LineParser = struct 
   let parse_line line = 
-    if String.sub line 10 2 <> "0x" then Riscv.unknown 
-    else Riscv.instr_of_string line 
+    let except = try String.sub line 10 2 <> "0x" with Invalid_argument _ -> true in
+      if except then Riscv.unknown 
+      else Riscv.instr_of_string line 
 end 
 
 let stream_lines _n ic = 
