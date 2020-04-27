@@ -16,6 +16,9 @@ val unknown : t
 val instr_of_match: Re2.Match.t -> t 
 (** Takes a match from the parser (regex) and returns an instruction *)
 
+val instr_of_string : string -> t 
+(** Alternative implementation to the above using OCaml string functions *)
+
 val print_instr : out_channel -> t -> Parser_options.compare -> unit 
 (** Prints a RISC-V instruction *)
 

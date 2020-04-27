@@ -2,3 +2,13 @@
 	(names test_buffer test_parser)
   (libraries core ospike_lib alcotest)
   (preprocess (pps ppx_jane)))
+
+(rule
+  (alias runtest)
+  (deps
+    (file test.txt)
+    (:x command.md))
+  (action
+    (progn
+    (run ocaml-mdx test %{x})
+    (diff? %{x} %{x}.corrected))))

@@ -25,13 +25,43 @@ let unknown = {
   opcode = 42;
 }
 
-let int_of_hexstring = function 
+let int_of_hexstring : string option -> int = function 
   | None -> 42 
   | Some str -> int_of_string str
+
+let strip_string_opt : string option -> string option = function 
+  | None     -> None 
+  | Some str -> Some (Core.String.strip str)
 
 let name = function 
   | None   -> "unknown"
   | Some s -> s  
+
+(* Extracts up to two arguments *)
+let extract_args args = 
+  let rec aux = function 
+    | (0, _) -> [] 
+    | (n, []) -> None :: aux (n - 1, [])
+    | (n, x::xs) -> strip_string_opt (Some x) :: aux (n - 1, xs)
+  in 
+  match aux (2, args) with 
+    | a::b::[] -> Some (a, b)
+    | _ -> None
+
+let instr_of_string str = 
+  match String.split_on_chars str ~on:[','] with 
+    | [] -> unknown 
+    | hd::args -> 
+      let meta = String.split_on_chars hd ~on:[' '] in 
+      let address = int_of_hexstring (Stdlib.List.nth_opt meta 4) in 
+      let brack_op = Stdlib.List.nth meta 5 in 
+      let opcode = int_of_hexstring (Some (Stdlib.(String.sub brack_op 1 (String.length brack_op - 2)))) in
+      let instr_name = Stdlib.List.nth meta 6 in 
+      let arg1 = Stdlib.List.nth_opt meta (List.length meta - 1) in 
+      let arg1 = if Some instr_name = arg1 then None else strip_string_opt arg1 in 
+        match extract_args args with 
+          | Some (arg2, arg3) -> { instr_name; arg1; arg2; arg3; opcode; address }
+          | None -> unknown
 
 let instr_of_match matching = 
   let address = int_of_hexstring (M.get ~sub:(`Name "address") matching) in 
