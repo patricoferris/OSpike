@@ -1,13 +1,11 @@
 type t = {
   instr_name: string; 
-  arg1: reg option; 
-  arg2: reg option; 
-  arg3: reg option;
-  address: addr;
+  arg1: string option; 
+  arg2: string option; 
+  arg3: string option;
+  address: int;
   opcode: int
 }
-  and addr = int
-  and reg = string 
 [@@deriving compare, sexp, hash]
 
 val unknown : t 

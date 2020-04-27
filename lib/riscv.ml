@@ -1,15 +1,13 @@
 open Core 
 
 type t = {
-  instr_name: String.t; 
-  arg1: reg option; 
-  arg2: reg option; 
-  arg3: reg option;
-  address: addr;
+  instr_name: string; 
+  arg1: string option; 
+  arg2: string option; 
+  arg3: string option;
+  address: int;
   opcode: int;
 }
-  and addr = int
-  and reg = string 
 [@@deriving compare, sexp, hash]
 
 module R = Re2
@@ -58,9 +56,9 @@ let instr_of_string str =
       let opcode = int_of_hexstring (Some (Stdlib.(String.sub brack_op 1 (String.length brack_op - 2)))) in
       let instr_name = Stdlib.List.nth meta 6 in 
       let arg1 = Stdlib.List.nth_opt meta (List.length meta - 1) in 
-      let arg1 = if Some instr_name = arg1 then None else strip_string_opt arg1 in 
+      let arg1 = match arg1 with None -> None | Some str -> if String.equal str instr_name then None else strip_string_opt arg1 in 
         match extract_args args with 
-          | Some (arg2, arg3) -> { instr_name; arg1; arg2; arg3; opcode; address }
+          | Some (arg2, arg3) -> { instr_name; arg1=arg1; arg2; arg3; opcode; address }
           | None -> unknown
 
 let instr_of_match matching = 
