@@ -1,6 +1,6 @@
 (tests
 	(names test_buffer test_parser)
-  (libraries core ospike_lib alcotest)
+  (libraries core ospike_lib alcotest mdx)
   (preprocess (pps ppx_jane)))
 
 (rule
