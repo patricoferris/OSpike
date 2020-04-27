@@ -19,8 +19,8 @@ let impl_to_string = function
   | Istring -> "string"
 
 let impl_from_string = function 
-  | "string" -> Istring 
-  | _ -> Iregex
+  | "regex" -> Iregex 
+  | _ -> Istring
 
 let to_string options = 
   let int_option_to_string = function 
